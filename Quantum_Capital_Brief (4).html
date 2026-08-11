@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quantum Capital — Interactive Brief</title>
+<style>
+:root{color-scheme:light;
+ --surface:#fcfcfb;--page:#f9f9f7;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;
+ --grid:#e1e0d9;--axis:#c3c2b7;--border:rgba(11,11,11,.10);
+ --s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#008300;--s7:#4a3aa7;--s8:#e34948;
+ --accent:#2a78d6}
+@media (prefers-color-scheme:dark){:root{color-scheme:dark;
+ --surface:#1a1a19;--page:#0d0d0d;--ink:#fff;--ink2:#c3c2b7;--muted:#898781;
+ --grid:#2c2c2a;--axis:#383835;--border:rgba(255,255,255,.10);
+ --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#008300;--s7:#9085e9;--s8:#e66767;--accent:#3987e5}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:880px;margin:0 auto;padding:24px 20px 120px}
+.ticker{position:sticky;top:0;z-index:50;background:var(--page);padding:12px 0;border-bottom:1px solid var(--grid);
+ display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.seg{display:inline-flex;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.seg button{border:0;background:transparent;color:var(--ink2);padding:8px 14px;font:inherit;cursor:pointer}
+.seg button.on{background:var(--accent);color:#fff}
+h1{font-size:30px;line-height:1.2;margin:24px 0 4px}
+h2{font-size:21px;margin:44px 0 6px}
+.sub{color:var(--ink2);font-size:14px;margin-bottom:8px}
+.method{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 14px;font-size:13.5px;color:var(--ink2);margin:12px 0}
+.method b{color:var(--ink)}
+.hero{font-size:54px;font-weight:700;margin:10px 0 0}
+.herosub{color:var(--ink2)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 16px 10px;margin:14px 0}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--ink2);margin:4px 0 2px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+svg{display:block;width:100%;height:auto}
+.bar{cursor:pointer}.bar:hover{opacity:.85}.bar.sel{stroke:var(--ink);stroke-width:1.5}
+.detail{border-left:3px solid var(--accent);background:var(--surface);border-radius:0 10px 10px 0;padding:12px 16px;margin:10px 0;font-size:14.5px}
+.detail ul{margin:6px 0 2px 18px;padding:0}.detail li{margin:2px 0}
+.muted{color:var(--muted);font-size:13px}
+details{border:1px solid var(--border);border-radius:10px;margin:10px 0;background:var(--surface)}
+details summary{cursor:pointer;padding:11px 14px;font-weight:600;list-style:none;display:flex;justify-content:space-between}
+details summary::after{content:"+";color:var(--muted)}details[open] summary::after{content:"–"}
+details .body{padding:0 14px 12px;font-size:14.5px}
+div[data-lang]{display:none}
+body.std div[data-lang="std"]{display:block}body.ste div[data-lang="ste"]{display:block}
+span[data-lang]{display:none}
+body.std span[data-lang="std"]{display:inline}body.ste span[data-lang="ste"]{display:inline}
+.tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--page);padding:6px 10px;border-radius:8px;font-size:12.5px;opacity:0;transition:opacity .1s;z-index:99;max-width:280px}
+.axislab{fill:var(--muted);font-size:11px}.dlabel{fill:var(--ink2);font-size:11px}
+.note{background:var(--surface);border:1px dashed var(--axis);border-radius:10px;padding:10px 14px;font-size:13.5px;color:var(--ink2)}
+.mini{display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:0 0 8px}
+.mini button{border:0;background:transparent;color:var(--ink2);padding:5px 12px;font:13px system-ui;cursor:pointer}
+.mini button.on{background:var(--accent);color:#fff}
+.dl{float:right;border:1px solid var(--border);background:transparent;color:var(--ink2);border-radius:8px;padding:4px 10px;font:12px system-ui;cursor:pointer}
+.dl:hover{border-color:var(--accent);color:var(--accent)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 2px}
+.chip{border:1px solid var(--border);background:transparent;border-radius:99px;padding:4px 11px;font:12.5px system-ui;cursor:pointer;color:var(--ink2);display:inline-flex;align-items:center;gap:6px}
+.chip.off{opacity:.35;text-decoration:line-through}
+.chip i{width:10px;height:10px;border-radius:3px;display:inline-block}
+/* chat */
+</style></head><body class="std">
+<div class="wrap">
+<div class="ticker">
+ <div class="seg" id="langseg">
+  <button class="on" data-set="std">Standard English</button>
+  <button data-set="ste">ASD-STE100 style</button>
+ </div>
+ </div>
+
+<h1>Quantum Capital — an interactive brief</h1>
+<div class="sub">Provider731 v10.158 · 2026 = January–August · fixed exchange rates · click bars, use the toggles, ask questions</div>
+
+<div class="method"><b>Method, stated once:</b> every figure below survived a two-stage adversarial check — one agent found it from primary sources; a second, independent agent tried to refute it, re-derived each amount at fixed FX, and tested it for duplication.
+<b>414</b> financing rounds and <b>90</b> government programmes verified · <b>325</b> money claims + <b>26</b> company claims adversarially re-checked · <b>90</b> programme durations and <b>56</b> round stages individually researched · <b>23</b> duplicates and <b>6</b> false claims rejected (incl. a $230M "quantum raise" that was a defence-group convertible) · <b>~1,000</b> agents · <b>~1.2B</b> tokens · 47/414 rounds have undisclosed amounts, so every total is a floor · China's state spend excluded as unquantifiable.</div>
+
+<div class="hero">$28.3B</div>
+<div class="herosub"><span data-lang="std">has reached tracked quantum companies — $12.4B private venture, $13.1B public-market share sales, $2.8B government grants paid directly to companies. Governments have additionally committed ≈$23.9B through national programmes, examined two ways in section 2.</span><span data-lang="ste">Tracked quantum companies received $28.3B. The parts: $12.4B venture, $13.1B public-market share sales, $2.8B government grants. Governments also committed approximately $23.9B in national programmes. Section 2 shows that money in two ways.</span></div>
+
+<h2>1 · Total capital by year — the shape of the boom</h2>
+<div class="card"><div class="legend">
+ <span><i class="sw" style="background:var(--s1)"></i>Private (venture)</span>
+ <span><i class="sw" style="background:var(--s2)"></i>Public-market</span>
+ <span><i class="sw" style="background:var(--s3)"></i>Government grants</span></div>
+ <button class="dl" data-fig="capchart" data-name="fig1-total-capital">Download PNG</button>
+ <svg id="capchart"></svg>
+ <div class="muted" id="capcap"></div>
+</div>
+<div id="capdetail"></div>
+<div data-lang="std"><p>A staircase with a cliff at 2025. Before 2021 the sector raised a few hundred million a year. 2021 jumps because the SPAC wave (IonQ, Rigetti, D-Wave, Arqit) created listed quantum stocks. 2022–24 is the plateau: SPAC hangover, higher rates, venture grinding near $1B a year. Then 2025 quadruples everything — the orange band shows why: once the stocks re-rated, listed companies sold new shares at scale (IonQ alone $3.5B). 2026 nearly matches 2025 in seven months, with a new green band: the US CHIPS package paying nine companies directly.</p></div>
+<div data-lang="ste"><p>The bars are small before 2021. In 2021 SPAC listings created quantum stocks. The bars stay flat in 2022–24. In 2025 the total becomes four times larger. The orange part shows the cause: listed companies sold new shares at high prices. IonQ sold $3.5B of shares. In 2026 the green part is new: the US CHIPS programme paid nine companies directly.</p></div>
+
+<h2>2 · Government money — announced vs. spent</h2>
+<div class="card">
+ <button class="dl" data-fig="govchart" data-name="fig2-government">Download PNG</button>
+ <div class="mini" id="govmode"><button class="on" data-m="spread">When it is spent (est.)</button><button data-m="ann">When it was announced</button></div>
+ <div class="mini" id="govhoriz"><button class="on" data-h="all">Through 2031</button><button data-h="now">End at 2026</button></div>
+ <div class="legend"><span><i class="sw" style="background:var(--s3)"></i>National programmes (spread over period)</span><span><i class="sw" style="background:var(--s4)"></i>Paid direct to companies (also in fig 1)</span></div>
+ <svg id="govchart"></svg>
+ <div class="muted" id="govcap"></div>
+</div>
+<div id="govdetail"></div>
+<div data-lang="std"><p>You were right that the announcement view misleads. A government announces a five-year envelope once, so the whole amount piles into one bar and every other year looks empty — 2023 looks like a $6.1B miracle and 2026 looks dead, when neither is true. The default view fixes this: each programme's total is <b>spread across its programme period</b> (the official period, verified from primary sources for 77 of 90 programmes; 13 unverifiable ones keep a 5-year assumption). Read this as the estimated rate of government deployment: a steady climb from ~$0.1B/yr (2016) to ~$3.0B/yr (2025), then a 2026 spike to ~$5.0B once direct-to-company awards are included, easing toward ~$1.9B/yr by 2027 as current envelopes expire — unless new ones are announced, which is exactly what the announcement waves (2018, 2020, 2023, 2025) have done every 2–3 years so far.</p></div>
+<div data-lang="ste"><p>The announcement view can mislead. A government announces a five-year budget one time. The full amount goes into one bar. The other years then look empty. That is not correct. The default view corrects this. We divide each programme across its period. Agents verified the official period for 77 of 90 programmes. For 13 programmes no source gives a period, so we use five years. This view shows the rate of government spending. It increases from $0.1B each year (2016) to $3.0B each year (2025). In 2026 it increases to $5.0B, because governments paid money directly to companies. Then it decreases to approximately $1.9B in 2027. Then it decreases, unless governments announce new programmes. Governments announced new programmes every two to three years until now.</p></div>
+<details><summary>Why the announcement view is so lumpy — and why 2026 looks near-zero there</summary><div class="body">
+<span data-lang="std">Governments announce in political waves: first strategies (2018: US, Germany, Israel, Japan), stimulus (2020–21: Germany's €2B, France, Netherlands), the second strategy wave (2023: UK £2.5B + Korea + India in one year), then the sub-national wave (2025: Maryland, Illinois, New York, Spain). Between waves there is simply nothing new to announce. 2026 in that view is $93M for four reasons: the $2.0B CHIPS package is itemised to companies (section 1's green band — counted once, not twice); the year is only 58% done; the $2.7B NQI Reauthorization is proposed, not law; and nearly every major economy already announced in 2023–25.</span>
+<span data-lang="ste">Governments announce in waves. Wave one: strategies (2018). Wave two: stimulus (2020–21). Wave three: larger strategies (2023). Wave four: regional programmes (2025). Between waves there is nothing new to announce. The 2026 bar in that view is $93M. The causes: (1) the $2.0B CHIPS money is counted in section 1, not here; (2) five months of the year remain; (3) the $2.7B US bill is not law; (4) most countries announced their strategies already.</span>
+</div></details>
+
+<h2>3 · Venture vs public-market — two different signals</h2>
+<div class="card"><div class="legend">
+ <span><i class="sw" style="background:var(--s1)"></i>Venture (committed)</span>
+ <span><i class="sw" style="background:var(--s2)"></i>Public-market (window)</span></div>
+ <button class="dl" data-fig="vpchart" data-name="fig3-venture-vs-public">Download PNG</button>
+ <svg id="vpchart"></svg>
+ <div class="muted">Same money as figure 1, government grants removed, so only the two private-sector channels remain. <b>Public-market</b> = new shares issued by already-listed companies (IPO, SPAC, follow-on, at-the-market) — cash to the company, priced by the market, not by diligence.</div>
+</div>
+<div data-lang="std"><p>Venture is diligenced, contractually committed capital — from ~$1B/yr (2021–24) to $4.3B (2025), $3.2B so far in 2026. Public-market money is window capital: it floods in when stocks run (2021, 2025–26) and vanishes when they don't (2023: $86M). Bull: public access is graduation. Bear: half the boom rides on a window that can close in a quarter. The one signal to watch — does blue keep growing if orange stops?</p></div>
+<div data-lang="ste"><p>Venture money is committed. It grew from $1B each year (2021–24) to $4.3B (2025). Public-market money follows stock prices. In 2023 it almost stopped ($86M). Watch one signal: if the orange part stops, does the blue part continue to grow?</p></div>
+
+<h2>4 · Rounds each year — count, then composition</h2>
+<div class="card">
+ <button class="dl" data-fig="rchart" data-name="fig4-rounds">Download PNG</button>
+ <div class="mini" id="rmode"><button class="on" data-m="tot">Total rounds</button><button data-m="stage">By stage</button></div>
+ <div class="chips" id="rchips"></div>
+ <svg id="rchart"></svg>
+ <div class="muted">Click a chip to include or exclude that band — both views recompute, so you can read IPOs alone, or everything except government grants. Every event carries a label: the 56 previously unlabeled rounds were researched individually (21 stated by a source, 35 inferred from the company's funding sequence). Late-stage = Series D/E, growth and pre-IPO. Government grants use the same green as figures 1 and 2.</div>
+</div>
+<div data-lang="std"><p>Deal count tells a steadier story than dollars: 3 events in 2016, 24 by 2020, 84 in 2025, 92 already in 2026 — activity never stopped growing, even through the 2022–23 dollar trough. Toggle to the stage view and the composition speaks. Seed is the largest venture band in almost every year and jumps to 21 in 2026, so new company formation has not paused. The funnel narrows hard: 111 seeds across the dataset become 92 Series A, 49 B, only 15 C. Late-stage (D/E, growth, pre-IPO) is just 27 events — winners exit sideways into public markets rather than raising late privates. And the fastest-growing band is government grants: 63 events, from 3 in 2020 to 21 in 2026, now the second-largest band of the year. That is the state becoming a routine counterparty, not an occasional one.</p></div>
+<div data-lang="ste"><p>The count increases each year: 3 (2016), 24 (2020), 84 (2025), 92 (2026 to August). Activity did not stop in 2022–23. Use the toggle to see the stages. Seed is the largest venture band in almost every year. It increases to 21 in 2026. New companies continue to start. Late rounds are rare: 111 seed rounds become 92 Series A, 49 Series B, and only 15 Series C. Late-stage events are only 27. Successful companies do an IPO instead. Government grants increase quickly: from 3 (2020) to 21 (2026). Governments are now a usual source of money.</p></div>
+
+<h2>5 · Modality — ranked by total capital</h2>
+<div class="card"><div class="legend">
+ <span><i class="sw" style="background:var(--s1)"></i>Private (venture)</span>
+ <span><i class="sw" style="background:var(--s2)"></i>Public-market</span>
+ <span><i class="sw" style="background:var(--s3)"></i>Government grants</span></div>
+ <button class="dl" data-fig="modchart" data-name="fig5-modality">Download PNG</button>
+ <svg id="modchart"></svg>
+ <div class="muted">Ordered by total capital raised. Bars show where each modality's money came from — trapped ion leads on public-market money from two listed companies, not on private conviction.</div>
+</div>
+<details><summary>Where is fresh venture conviction going? (2021→2026)</summary><div class="body">
+ <button class="dl" data-fig="modvchart" data-name="fig5b-venture-by-modality">Download PNG</button>
+ <svg id="modvchart"></svg><div class="legend" id="modvlegend"></div>
+ <span data-lang="std"><p>Trapped ion's mountain is mostly IonQ and Quantinuum public raises — its <i>venture</i> line collapsed to $127M in 2026 once the leaders went public. Fresh venture now leads into silicon spin ($608M — Diraq, Equal1) and superconducting ($575M). Bull: healthy rotation — public markets carry the scaled leaders, venture hunts the next architecture. Bear: new conviction is leaving the most-capitalised modality.</p></span>
+ <span data-lang="ste"><p>Most trapped-ion money is public-market money from two companies. New venture money for trapped ion decreased to $127M in 2026. New venture money now goes to silicon spin ($608M) and superconducting ($575M). One view: this is normal rotation. A different view: it is a warning for trapped ion valuations.</p></span>
+</div></details>
+
+<h2>6 · Capital by country — where the money lands</h2>
+<div class="card"><div class="legend">
+ <span><i class="sw" style="background:var(--s1)"></i>Venture</span>
+ <span><i class="sw" style="background:var(--s2)"></i>Public-market</span>
+ <span><i class="sw" style="background:var(--s3)"></i>Government</span></div>
+ <button class="dl" data-fig="ctrychart" data-name="fig6-country">Download PNG</button>
+ <svg id="ctrychart"></svg>
+ <div class="muted">Company capital by the company's home country, plus that country's announced national programmes. China shows DISCLOSED money only — its state spend is real, large and unpublished, so this chart understates it by an unknowable amount.</div>
+</div>
+<div data-lang="std"><p>USA 62%; nobody else reaches 10%. Only America combines federal programmes, a state spending race, equity-taking procurement and deep public markets. The caveat that matters: China's bar is <i>disclosed</i> money only — its state spend is real, large and unpublished. Every geographic figure here silently carries that asymmetry.</p></div>
+<div data-lang="ste"><p>US companies received 62% of the money. No other country reaches 10%. Warning: the China bar shows only published data. China spends more, but does not publish the numbers.</p></div>
+
+<h2>The bottom line</h2>
+<div class="note">
+<span data-lang="std"><b>Two layers moving at different speeds.</b> A small public/quasi-public elite — ten names, ~63% of capital, government equity stakes — whose funding tracks stock markets and policy. And a broad private base of 400+ companies whose venture funding is at record levels but four times smaller than the headline. The signal that decides which story is true: does <b>venture</b> keep climbing if the <b>public window</b> closes?</span>
+<span data-lang="ste"><b>The market has two layers.</b> Layer one: ten large companies with approximately 63% of the money. Their money follows stock markets and government policy. Layer two: more than 400 private companies. Their venture money is at a record level, but it is four times smaller. Watch one signal: if the stock window closes, does venture money continue to increase?</span>
+</div>
+</div>
+<div class="tip" id="tip"></div>
+<script>
+const D={"cap": {"2016": {"venture": 36, "public": 0, "grant": 0, "other": 0, "rounds": 3, "vrounds": 3}, "2017": {"venture": 195, "public": 50, "grant": 0, "other": 0, "rounds": 7, "vrounds": 6}, "2018": {"venture": 31, "public": 0, "grant": 0, "other": 0, "rounds": 8, "vrounds": 7}, "2019": {"venture": 162, "public": 0, "grant": 0, "other": 0, "rounds": 12, "vrounds": 12}, "2020": {"venture": 460, "public": 114, "grant": 8, "other": 0, "rounds": 24, "vrounds": 19}, "2021": {"venture": 831, "public": 1036, "grant": 0, "other": 0, "rounds": 24, "vrounds": 22}, "2022": {"venture": 938, "public": 726, "grant": 18, "other": 0, "rounds": 40, "vrounds": 33}, "2023": {"venture": 1250, "public": 86, "grant": 42, "other": 0, "rounds": 48, "vrounds": 39}, "2024": {"venture": 1042, "public": 1353, "grant": 52, "other": 0, "rounds": 60, "vrounds": 40}, "2025": {"venture": 4267, "public": 6482, "grant": 41, "other": 0, "rounds": 83, "vrounds": 54}, "2026": {"venture": 3166, "public": 3296, "grant": 2654, "other": 0, "rounds": 91, "vrounds": 59}}, "capN": {"2016": ["Quiet years: a handful of seed rounds.", "Small year. Few seed rounds only."], "2017": ["Early venture stirrings \u2014 Rigetti, IonQ first-rounds era.", "Small year. First venture rounds."], "2018": ["Still pre-boom; capital in tens of millions.", "Small year."], "2019": ["PsiQuantum and peers raising quietly; amounts mostly undisclosed.", "Small year. Some amounts are not public."], "2020": ["First real venture year (~$0.5B).", "Venture money starts: approximately $0.5B."], "2021": ["The SPAC wave: IonQ, Rigetti, D-Wave, Arqit list. Public money exceeds venture 3:1.", "SPAC listings. Public money is three times venture money."], "2022": ["SPAC hangover + rate shock; the window narrows fast.", "Stock prices decrease. The window becomes narrow."], "2023": ["Public money trough ($86M). Venture holds ~$1.25B \u2014 the sector's floor is private conviction.", "Public money almost stops: $86M. Venture money stays at $1.25B."], "2024": ["Recovery begins: D-Wave's ATM, first big trapped-ion venture rounds.", "Slow recovery."], "2025": ["The cliff: $10.8B. IonQ sells $3.5B of shares, PsiQuantum $1B Series E, Quantinuum $839M.", "Largest year: $10.8B. IonQ sells $3.5B of shares."], "2026": ["Seven months: $9.2B. CHIPS pays 9 companies $2.0B; Quantinuum IPOs at $1.68B.", "Seven months: $9.2B. CHIPS pays nine companies $2.0B."]}, "ann": {"2016": {"total": 1136, "n": 2, "top": [{"c": "European Union", "usd": 1080, "y": 2016, "name": "EU Quantum Technologies Flagship (announced)"}, {"c": "Canada", "usd": 56, "y": 2016, "name": "Canada First Research Excellence Fund \u2014 Transformative Quant"}]}, "2017": {"total": 2380, "n": 2, "top": [{"c": "China", "usd": 1400, "y": 2017, "name": "Anhui Quantum Science & Technology Industry Development Fund"}, {"c": "China", "usd": 980, "y": 2017, "name": "National Laboratory for Quantum Information Sciences (Hefei)"}]}, "2018": {"total": 2350, "n": 6, "top": [{"c": "USA", "usd": 1275, "y": 2018, "name": "National Quantum Initiative Act (P.L. 115-368)"}, {"c": "Germany", "usd": 702, "y": 2018, "name": "Federal Framework Programme on Quantum Technologies ('Quante"}, {"c": "Israel", "usd": 338, "y": 2018, "name": "Israel National Quantum Initiative (INQI) declared"}, {"c": "Japan", "usd": 15, "y": 2018, "name": "Q-LEAP Program launched (MEXT, 2018-2027)"}, {"c": "Hungary", "usd": 10, "y": 2018, "name": "National Quantum Technology Programme (HunQuTech; NKFIH proj"}]}, "2019": {"total": 235, "n": 3, "top": [{"c": "United Kingdom", "usd": 194, "y": 2019, "name": "ISCF Commercialising Quantum Technologies challenge (NQTP co"}, {"c": "Canada", "usd": 22, "y": 2019, "name": "Quantum Encryption and Science Satellite (QEYSSat) \u2014 Canadia"}, {"c": "Switzerland", "usd": 19, "y": 2019, "name": "NCCR SPIN \u2013 National Centre of Competence in Research 'Spin "}]}, "2020": {"total": 2688, "n": 10, "top": [{"c": "Germany", "usd": 2160, "y": 2020, "name": "COVID stimulus (Konjunktur- und Zukunftspaket) quantum alloc"}, {"c": "Taiwan", "usd": 248, "y": 2020, "name": "5-year quantum technology investment plan (NT$8bn)"}, {"c": "Israel", "usd": 68, "y": 2020, "name": "2020 increase to the National Quantum Initiative budget (NIS"}, {"c": "Japan", "usd": 67, "y": 2020, "name": "Quantum Technology Innovation Strategy (21 Jan 2020) + Moons"}, {"c": "Germany", "usd": 43, "y": 2020, "name": "Competence Center Quantum Computing Baden-Wuerttemberg (KQCB"}]}, "2021": {"total": 2573, "n": 8, "top": [{"c": "France", "usd": 1134, "y": 2021, "name": "Plan Quantique / Strategie nationale sur les technologies qu"}, {"c": "Netherlands", "usd": 664, "y": 2021, "name": "Quantum Delta NL - National Growth Fund (Nationaal Groeifond"}, {"c": "Germany", "usd": 324, "y": 2021, "name": "Munich Quantum Valley \u2014 Bavarian state funding (Hightech Age"}, {"c": "Canada", "usd": 263, "y": 2021, "name": "Budget 2021 \u2014 National Quantum Strategy commitment"}, {"c": "Austria", "usd": 116, "y": 2021, "name": "Quantum Austria initiative"}]}, "2022": {"total": 1619, "n": 11, "top": [{"c": "Russia", "usd": 1100, "y": 2022, "name": "Federal commitment to development of quantum technologies to"}, {"c": "Italy", "usd": 125, "y": 2022, "name": "NQSTI \u2014 National Quantum Science and Technology Institute (P"}, {"c": "European Union", "usd": 108, "y": 2022, "name": "EuroHPC JU first six European quantum computers (site select"}, {"c": "Canada", "usd": 96, "y": 2022, "name": "Sherbrooke quantique innovation zone (DistriQ) \u2014 Government "}, {"c": "Switzerland", "usd": 88, "y": 2022, "name": "Swiss Quantum Initiative (SQI) launched"}]}, "2023": {"total": 6058, "n": 12, "top": [{"c": "United Kingdom", "usd": 3175, "y": 2023, "name": "National Quantum Strategy (2024-2034)"}, {"c": "South Korea", "usd": 1752, "y": 2023, "name": "Quantum Science and Technology Strategy"}, {"c": "India", "usd": 720, "y": 2023, "name": "National Quantum Mission (NQM)"}, {"c": "Denmark", "usd": 145, "y": 2023, "name": "National Strategy for Quantum Technology (Part 1)"}, {"c": "Spain", "usd": 130, "y": 2023, "name": "Basque Quantum (BasQ) \u2014 Basque Government quantum strategy i"}]}, "2024": {"total": 2994, "n": 13, "top": [{"c": "Japan", "usd": 871, "y": 2024, "name": "Quantum Industrialization Package (multi-ministry)"}, {"c": "Australia", "usd": 620, "y": 2024, "name": "PsiQuantum Brisbane joint federal/state investment"}, {"c": "France", "usd": 540, "y": 2024, "name": "PROQCIMA \u2014 DGA / Minist\u00e8re des Arm\u00e9es universal quantum comp"}, {"c": "USA", "usd": 500, "y": 2024, "name": "Illinois state investment in the Illinois Quantum and Microe"}, {"c": "Singapore", "usd": 222, "y": 2024, "name": "National Quantum Strategy (NQS)"}]}, "2025": {"total": 3267, "n": 16, "top": [{"c": "USA", "usd": 1000, "y": 2025, "name": "Maryland 'Capital of Quantum' Initiative"}, {"c": "Spain", "usd": 873, "y": 2025, "name": "Spain National Quantum Technologies Strategy 2025-2030"}, {"c": "USA", "usd": 625, "y": 2025, "name": "DOE NQI Centers Renewal"}, {"c": "USA", "usd": 300, "y": 2025, "name": "New York State \u2014 Quantum Research and Innovation Hub at SUNY"}, {"c": "Czechia", "usd": 145, "y": 2025, "name": "National Strategy for Quantum Technologies 2026+ (N\u00e1rodn\u00ed st"}]}, "2026": {"total": 93, "n": 4, "top": [{"c": "Ireland", "usd": 43, "y": 2026, "name": "Rinn Quantum (national Research Ireland centre for Quantum I"}, {"c": "Israel", "usd": 27, "y": 2026, "name": "Israel Innovation Authority national quantum computing R&D i"}, {"c": "USA", "usd": 20, "y": 2026, "name": "Tennessee Quantum Initiative"}, {"c": "Sweden", "usd": 3, "y": 2026, "name": "NordicQCI \u2014 Nordic Quantum Communication Infrastructure (Vin"}]}}, "annN": {"2016": ["EU Flagship announced (\u20ac1B) \u2014 the first big multi-national envelope.", "The EU announces the \u20ac1B Flagship."], "2017": ["China's visible peak: Anhui fund + Hefei lab. Most Chinese spend is unpublished.", "China announces two programmes. Most Chinese numbers are not public."], "2018": ["First strategy wave: US NQI Act, Germany, Israel, Japan.", "Wave one: four countries announce strategies."], "2019": ["Between waves \u2014 only top-ups. Nothing new to book.", "Small year. Only small additions."], "2020": ["Germany's COVID stimulus carves \u20ac2B \u2014 one decision is 80% of the bar.", "Germany puts \u20ac2B of stimulus into quantum."], "2021": ["France + Netherlands + Bavaria: the stimulus wave continues.", "France, Netherlands, Bavaria announce programmes."], "2022": ["Dip: Russia's $1.1B envelope is most of it.", "Smaller year. Russia announces $1.1B."], "2023": ["The spike: UK \u00a32.5B + Korea + India land in one year. An artefact of booking whole envelopes at announcement.", "Largest bar: UK, South Korea, India announce together. The full amounts go into one year."], "2024": ["Japan, Australia's PsiQuantum bet, France's defence programme \u2014 strategy gives way to procurement.", "Japan, Australia, France announce. Governments start to buy."], "2025": ["The sub-national wave: US states (Maryland $1B, NM, NY), Spain, DOE renewal \u2014 16 commitments.", "US states and Spain announce. 16 commitments."], "2026": ["$93M \u2014 see the four reasons in the expander. The real 2026 money ($2.0B CHIPS) is in section 1's ledger.", "The bar is small. See the four causes. The CHIPS money is in section 1."]}, "spread": {"2016": 97, "2017": 576, "2018": 893, "2019": 1085, "2020": 1437, "2021": 1908, "2022": 1866, "2023": 2008, "2024": 2904, "2025": 2968, "2026": 2338, "2027": 1884, "2028": 1564, "2029": 1331, "2030": 902, "2031": 537}, "spreadTop": {"2016": [{"c": "United Kingdom", "name": "National Quantum Technologies Programme \u2014 Phase 1", "per": 69, "span": "2014\u20132018", "src": "verified"}, {"c": "China", "name": "Beijing\u2013Shanghai Quantum Communication Backbone (2,000 km ", "per": 16, "span": "2013\u20132017", "src": "verified"}, {"c": "Canada", "name": "Canada First Research Excellence Fund \u2014 Transformative Qua", "per": 8, "span": "2016\u20132022", "src": "verified"}, {"c": "Switzerland", "name": "NCCR QSIT \u2013 National Centre of Competence in Research 'Qua", "per": 5, "span": "2011\u20132022", "src": "verified"}], "2017": [{"c": "China", "name": "Anhui Quantum Science & Technology Industry Development Fu", "per": 280, "span": "2017\u20132021", "src": "assumed 5y"}, {"c": "China", "name": "National Laboratory for Quantum Information Sciences (Hefe", "per": 196, "span": "2017\u20132021", "src": "assumed 5y"}, {"c": "United Kingdom", "name": "National Quantum Technologies Programme \u2014 Phase 1", "per": 69, "span": "2014\u20132018", "src": "verified"}, {"c": "China", "name": "Beijing\u2013Shanghai Quantum Communication Backbone (2,000 km ", "per": 16, "span": "2013\u20132017", "src": "verified"}, {"c": "Canada", "name": "Canada First Research Excellence Fund \u2014 Transformative Qua", "per": 8, "span": "2016\u20132022", "src": "verified"}], "2018": [{"c": "China", "name": "Anhui Quantum Science & Technology Industry Development Fu", "per": 280, "span": "2017\u20132021", "src": "assumed 5y"}, {"c": "China", "name": "National Laboratory for Quantum Information Sciences (Hefe", "per": 196, "span": "2017\u20132021", "src": "assumed 5y"}, {"c": "Germany", "name": "Federal Framework Programme on Quantum Technologies ('Quan", "per": 140, "span": "2018\u20132022", "src": "verified"}, {"c": "European Union", "name": "EU Quantum Technologies Flagship (announced)", "per": 108, "span": "2018\u20132027", "src": "verified"}, {"c": "United Kingdom", "name": "National Quantum Technologies Programme \u2014 Phase 1", "per": 69, "span": "2014\u20132018", "src": "verified"}], "2019": [{"c": "China", "name": "Anhui Quantum Science & Technology Industry Development Fu", "per": 280, "span": "2017\u20132021", "src": "assumed 5y"}, {"c": "USA", "name": "National Quantum Initiative Act (P.L. 115-368)", "per": 255, "span": "2019\u20132023", "src": "verified"}, {"c": "China", "name": "National Laboratory for Quantum Information Sciences (Hefe", "per": 196, "span": "2017\u20132021", "src": "assumed 5y"}, {"c": "Germany", "name": "Federal Framework Programme on Quantum Technologies ('Quan", "per": 140, "span": "2018\u20132022", "src": "verified"}, {"c": "European Union", "name": "EU Quantum Technologies Flagship (announced)", "per": 108, "span": "2018\u20132027", "src": "verified"}], "2020": [{"c": "Germany", "name": "COVID stimulus (Konjunktur- und Zukunftspaket) quantum all", "per": 309, "span": "2020\u20132026", "src": "verified"}, {"c": "China", "name": "Anhui Quantum Science & Technology Industry Development Fu", "per": 280, "span": "2017\u20132021", "src": "assumed 5y"}, {"c": "USA", "name": "National Quantum Initiative Act (P.L. 115-368)", "per": 255, "span": "2019\u20132023", "src": "verified"}, {"c": "China", "name": "National Laboratory for Quantum Information Sciences (Hefe", "per": 196, "span": "2017\u20132021", "src": "assumed 5y"}, {"c": "Germany", "name": "Federal Framework Programme on Quantum Technologies ('Quan", "per": 140, "span": "2018\u20132022", "src": "verified"}], "2021": [{"c": "Germany", "name": "COVID stimulus (Konjunktur- und Zukunftspaket) quantum all", "per": 309, "span": "2020\u20132026", "src": "verified"}, {"c": "China", "name": "Anhui Quantum Science & Technology Industry Development Fu", "per": 280, "span": "2017\u20132021", "src": "assumed 5y"}, {"c": "USA", "name": "National Quantum Initiative Act (P.L. 115-368)", "per": 255, "span": "2019\u20132023", "src": "verified"}, {"c": "France", "name": "Plan Quantique / Strategie nationale sur les technologies ", "per": 227, "span": "2021\u20132025", "src": "verified"}, {"c": "China", "name": "National Laboratory for Quantum Information Sciences (Hefe", "per": 196, "span": "2017\u20132021", "src": "assumed 5y"}], "2022": [{"c": "Germany", "name": "COVID stimulus (Konjunktur- und Zukunftspaket) quantum all", "per": 309, "span": "2020\u20132026", "src": "verified"}, {"c": "Russia", "name": "Federal commitment to development of quantum technologies ", "per": 275, "span": "2022\u20132025", "src": "verified"}, {"c": "USA", "name": "National Quantum Initiative Act (P.L. 115-368)", "per": 255, "span": "2019\u20132023", "src": "verified"}, {"c": "France", "name": "Plan Quantique / Strategie nationale sur les technologies ", "per": 227, "span": "2021\u20132025", "src": "verified"}, {"c": "Germany", "name": "Federal Framework Programme on Quantum Technologies ('Quan", "per": 140, "span": "2018\u20132022", "src": "verified"}], "2023": [{"c": "Germany", "name": "COVID stimulus (Konjunktur- und Zukunftspaket) quantum all", "per": 309, "span": "2020\u20132026", "src": "verified"}, {"c": "Russia", "name": "Federal commitment to development of quantum technologies ", "per": 275, "span": "2022\u20132025", "src": "verified"}, {"c": "USA", "name": "National Quantum Initiative Act (P.L. 115-368)", "per": 255, "span": "2019\u20132023", "src": "verified"}, {"c": "France", "name": "Plan Quantique / Strategie nationale sur les technologies ", "per": 227, "span": "2021\u20132025", "src": "verified"}, {"c": "South Korea", "name": "Quantum Science and Technology Strategy", "per": 135, "span": "2023\u20132035", "src": "verified"}], "2024": [{"c": "USA", "name": "Illinois state investment in the Illinois Quantum and Micr", "per": 500, "span": "2024\u20132024", "src": "verified"}, {"c": "United Kingdom", "name": "National Quantum Strategy (2024-2034)", "per": 318, "span": "2024\u20132033", "src": "verified"}, {"c": "Germany", "name": "COVID stimulus (Konjunktur- und Zukunftspaket) quantum all", "per": 309, "span": "2020\u20132026", "src": "verified"}, {"c": "Russia", "name": "Federal commitment to development of quantum technologies ", "per": 275, "span": "2022\u20132025", "src": "verified"}, {"c": "France", "name": "Plan Quantique / Strategie nationale sur les technologies ", "per": 227, "span": "2021\u20132025", "src": "verified"}], "2025": [{"c": "United Kingdom", "name": "National Quantum Strategy (2024-2034)", "per": 318, "span": "2024\u20132033", "src": "verified"}, {"c": "Germany", "name": "COVID stimulus (Konjunktur- und Zukunftspaket) quantum all", "per": 309, "span": "2020\u20132026", "src": "verified"}, {"c": "Russia", "name": "Federal commitment to development of quantum technologies ", "per": 275, "span": "2022\u20132025", "src": "verified"}, {"c": "France", "name": "Plan Quantique / Strategie nationale sur les technologies ", "per": 227, "span": "2021\u20132025", "src": "verified"}, {"c": "USA", "name": "Maryland 'Capital of Quantum' Initiative", "per": 200, "span": "2025\u20132029", "src": "verified"}], "2026": [{"c": "United Kingdom", "name": "National Quantum Strategy (2024-2034)", "per": 318, "span": "2024\u20132033", "src": "verified"}, {"c": "Germany", "name": "COVID stimulus (Konjunktur- und Zukunftspaket) quantum all", "per": 309, "span": "2020\u20132026", "src": "verified"}, {"c": "USA", "name": "Maryland 'Capital of Quantum' Initiative", "per": 200, "span": "2025\u20132029", "src": "verified"}, {"c": "Spain", "name": "Spain National Quantum Technologies Strategy 2025-2030", "per": 145, "span": "2025\u20132030", "src": "verified"}, {"c": "South Korea", "name": "Quantum Science and Technology Strategy", "per": 135, "span": "2023\u20132035", "src": "verified"}], "2027": [{"c": "United Kingdom", "name": "National Quantum Strategy (2024-2034)", "per": 318, "span": "2024\u20132033", "src": "verified"}, {"c": "USA", "name": "Maryland 'Capital of Quantum' Initiative", "per": 200, "span": "2025\u20132029", "src": "verified"}, {"c": "Spain", "name": "Spain National Quantum Technologies Strategy 2025-2030", "per": 145, "span": "2025\u20132030", "src": "verified"}, {"c": "South Korea", "name": "Quantum Science and Technology Strategy", "per": 135, "span": "2023\u20132035", "src": "verified"}, {"c": "USA", "name": "DOE NQI Centers Renewal", "per": 125, "span": "2025\u20132029", "src": "verified"}], "2028": [{"c": "United Kingdom", "name": "National Quantum Strategy (2024-2034)", "per": 318, "span": "2024\u20132033", "src": "verified"}, {"c": "USA", "name": "Maryland 'Capital of Quantum' Initiative", "per": 200, "span": "2025\u20132029", "src": "verified"}, {"c": "Spain", "name": "Spain National Quantum Technologies Strategy 2025-2030", "per": 145, "span": "2025\u20132030", "src": "verified"}, {"c": "South Korea", "name": "Quantum Science and Technology Strategy", "per": 135, "span": "2023\u20132035", "src": "verified"}, {"c": "USA", "name": "DOE NQI Centers Renewal", "per": 125, "span": "2025\u20132029", "src": "verified"}], "2029": [{"c": "United Kingdom", "name": "National Quantum Strategy (2024-2034)", "per": 318, "span": "2024\u20132033", "src": "verified"}, {"c": "USA", "name": "Maryland 'Capital of Quantum' Initiative", "per": 200, "span": "2025\u20132029", "src": "verified"}, {"c": "Spain", "name": "Spain National Quantum Technologies Strategy 2025-2030", "per": 145, "span": "2025\u20132030", "src": "verified"}, {"c": "South Korea", "name": "Quantum Science and Technology Strategy", "per": 135, "span": "2023\u20132035", "src": "verified"}, {"c": "USA", "name": "DOE NQI Centers Renewal", "per": 125, "span": "2025\u20132029", "src": "verified"}], "2030": [{"c": "United Kingdom", "name": "National Quantum Strategy (2024-2034)", "per": 318, "span": "2024\u20132033", "src": "verified"}, {"c": "Spain", "name": "Spain National Quantum Technologies Strategy 2025-2030", "per": 145, "span": "2025\u20132030", "src": "verified"}, {"c": "South Korea", "name": "Quantum Science and Technology Strategy", "per": 135, "span": "2023\u20132035", "src": "verified"}, {"c": "Japan", "name": "Quantum Industrialization Package (multi-ministry)", "per": 124, "span": "2024\u20132030", "src": "verified"}, {"c": "India", "name": "National Quantum Mission (NQM)", "per": 90, "span": "2023\u20132030", "src": "verified"}], "2031": [{"c": "United Kingdom", "name": "National Quantum Strategy (2024-2034)", "per": 318, "span": "2024\u20132033", "src": "verified"}, {"c": "South Korea", "name": "Quantum Science and Technology Strategy", "per": 135, "span": "2023\u20132035", "src": "verified"}, {"c": "France", "name": "PROQCIMA \u2014 DGA / Minist\u00e8re des Arm\u00e9es universal quantum co", "per": 54, "span": "2024\u20132033", "src": "verified"}, {"c": "Czechia", "name": "National Strategy for Quantum Technologies 2026+ (N\u00e1rodn\u00ed ", "per": 21, "span": "2026\u20132032", "src": "verified"}, {"c": "Ireland", "name": "Rinn Quantum (national Research Ireland centre for Quantum", "per": 5, "span": "2026\u20132033", "src": "verified"}]}, "spreadN": {"2016": 4, "2017": 7, "2018": 12, "2019": 13, "2020": 20, "2021": 28, "2022": 37, "2023": 43, "2024": 53, "2025": 58, "2026": 50, "2027": 39, "2028": 27, "2029": 19, "2030": 11, "2031": 7}, "rounds": {"2016": {"Seed": 1, "Series A": 0, "Series B": 0, "Series C": 0, "Series D": 0, "Series E": 0, "Venture (other/unlabeled)": 2, "Non-venture": 0}, "2017": {"Seed": 1, "Series A": 2, "Series B": 3, "Series C": 0, "Series D": 0, "Series E": 0, "Venture (other/unlabeled)": 0, "Non-venture": 1}, "2018": {"Seed": 6, "Series A": 1, "Series B": 0, "Series C": 0, "Series D": 0, "Series E": 0, "Venture (other/unlabeled)": 0, "Non-venture": 1}, "2019": {"Seed": 5, "Series A": 3, "Series B": 1, "Series C": 0, "Series D": 0, "Series E": 0, "Venture (other/unlabeled)": 3, "Non-venture": 0}, "2020": {"Seed": 8, "Series A": 5, "Series B": 3, "Series C": 2, "Series D": 0, "Series E": 0, "Venture (other/unlabeled)": 1, "Non-venture": 5}, "2021": {"Seed": 6, "Series A": 8, "Series B": 4, "Series C": 0, "Series D": 1, "Series E": 0, "Venture (other/unlabeled)": 3, "Non-venture": 2}, "2022": {"Seed": 16, "Series A": 11, "Series B": 4, "Series C": 1, "Series D": 0, "Series E": 0, "Venture (other/unlabeled)": 1, "Non-venture": 11}, "2023": {"Seed": 15, "Series A": 11, "Series B": 6, "Series C": 0, "Series D": 0, "Series E": 0, "Venture (other/unlabeled)": 7, "Non-venture": 10}, "2024": {"Seed": 10, "Series A": 13, "Series B": 6, "Series C": 1, "Series D": 0, "Series E": 0, "Venture (other/unlabeled)": 10, "Non-venture": 23}, "2025": {"Seed": 8, "Series A": 23, "Series B": 8, "Series C": 5, "Series D": 0, "Series E": 2, "Venture (other/unlabeled)": 9, "Non-venture": 30}, "2026": {"Seed": 19, "Series A": 8, "Series B": 6, "Series C": 6, "Series D": 1, "Series E": 0, "Venture (other/unlabeled)": 19, "Non-venture": 33}}, "modtot": {"Superconducting": {"public": 1433, "venture": 1853, "grant": 1109, "other": 95}, "Trapped Ion": {"public": 5816, "venture": 1506, "grant": 103, "other": 1}, "Neutral Atom": {"public": 1050, "venture": 1322, "grant": 259}, "Photonic": {"venture": 2238, "public": 1981, "grant": 247, "other": 15}, "Silicon Spin": {"venture": 950, "grant": 48}, "Other": {"public": 1958, "venture": 526, "other": 70, "grant": 119}}, "modv": {"Superconducting": {"2021": 29, "2022": 381, "2023": 109, "2024": 44, "2025": 521, "2026": 575}, "Trapped Ion": {"2021": 7, "2022": 17, "2023": 0, "2024": 314, "2025": 943, "2026": 127}, "Neutral Atom": {"2021": 79, "2022": 176, "2023": 116, "2024": 85, "2025": 344, "2026": 484}, "Photonic": {"2021": 566, "2022": 182, "2023": 66, "2024": 50, "2025": 1030, "2026": 146}, "Silicon Spin": {"2021": 6, "2022": 20, "2023": 208, "2024": 22, "2025": 15, "2026": 608}, "Other": {"2021": 20, "2022": 7, "2023": 0, "2024": 36, "2025": 69, "2026": 280}}, "country": [["USA", 5712, 9336, 8317], ["UK", 1099, 575, 3766], ["China", 720, 510, 2528], ["Germany", 371, 0, 3356], ["Canada", 687, 1845, 619], ["France", 560, 500, 1700], ["Spain", 824, 0, 1078], ["South Korea", 32, 22, 1752], ["European Union", 0, 0, 1201]], "bands": {"2016": {"Seed": 1, "Series A": 0, "Series B": 0, "Series C": 0, "Late-stage": 2, "IPO": 0, "Other market financing": 0, "Government grants": 0}, "2017": {"Seed": 1, "Series A": 2, "Series B": 3, "Series C": 0, "Late-stage": 0, "IPO": 0, "Other market financing": 1, "Government grants": 0}, "2018": {"Seed": 6, "Series A": 1, "Series B": 0, "Series C": 0, "Late-stage": 0, "IPO": 0, "Other market financing": 0, "Government grants": 1}, "2019": {"Seed": 8, "Series A": 3, "Series B": 1, "Series C": 0, "Late-stage": 0, "IPO": 0, "Other market financing": 0, "Government grants": 0}, "2020": {"Seed": 8, "Series A": 6, "Series B": 3, "Series C": 2, "Late-stage": 0, "IPO": 1, "Other market financing": 1, "Government grants": 3}, "2021": {"Seed": 9, "Series A": 8, "Series B": 4, "Series C": 0, "Late-stage": 1, "IPO": 2, "Other market financing": 0, "Government grants": 0}, "2022": {"Seed": 17, "Series A": 11, "Series B": 4, "Series C": 1, "Late-stage": 0, "IPO": 2, "Other market financing": 7, "Government grants": 2}, "2023": {"Seed": 16, "Series A": 13, "Series B": 8, "Series C": 0, "Late-stage": 2, "IPO": 0, "Other market financing": 4, "Government grants": 6}, "2024": {"Seed": 15, "Series A": 13, "Series B": 7, "Series C": 1, "Late-stage": 4, "IPO": 0, "Other market financing": 10, "Government grants": 13}, "2025": {"Seed": 9, "Series A": 23, "Series B": 10, "Series C": 5, "Late-stage": 7, "IPO": 1, "Other market financing": 12, "Government grants": 17}, "2026": {"Seed": 21, "Series A": 12, "Series B": 9, "Series C": 6, "Late-stage": 11, "IPO": 1, "Other market financing": 11, "Government grants": 21}}, "meta": {"durVerified": 77, "durAssumed": 13, "durTotal": 90}, "govcomb": {"2016": {"nat": 97, "direct": 0}, "2017": {"nat": 576, "direct": 0}, "2018": {"nat": 893, "direct": 0}, "2019": {"nat": 1085, "direct": 0}, "2020": {"nat": 1437, "direct": 8}, "2021": {"nat": 1908, "direct": 0}, "2022": {"nat": 1866, "direct": 18}, "2023": {"nat": 2008, "direct": 42}, "2024": {"nat": 2904, "direct": 52}, "2025": {"nat": 2968, "direct": 41}, "2026": {"nat": 2338, "direct": 2654}, "2027": {"nat": 1884, "direct": 0}, "2028": {"nat": 1564, "direct": 0}, "2029": {"nat": 1331, "direct": 0}, "2030": {"nat": 902, "direct": 0}, "2031": {"nat": 537, "direct": 0}}, "modorder": [["Trapped Ion", 1507, 5816, 103], ["Photonic", 2238, 1981, 247], ["Superconducting", 1846, 1433, 1109], ["Neutral Atom", 1322, 1050, 259], ["Other", 526, 1958, 119], ["Silicon Spin", 950, 0, 48]], "totals": {"cap": 28335, "dropN": 10, "dropUsd": 195}};
+const YRS=Object.keys(D.cap);
+const css=v=>getComputedStyle(document.body).getPropertyValue(v).trim();
+const tip=document.getElementById('tip');
+const showTip=(e,h)=>{tip.innerHTML=h;tip.style.opacity=1;tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY+8)+'px';};
+const hideTip=()=>tip.style.opacity=0;
+const fm=v=>v>=1000?('$'+(v/1000).toFixed(1)+'B'):('$'+Math.round(v)+'M');
+const lang=()=>document.body.classList.contains('ste')?1:0;
+function stacked(svgId,years,keys,colors,getVals,onClick,H,fmt){
+ fmt=fmt||fm;const svg=document.getElementById(svgId);const W=840;const P={l:52,r:10,t:16,b:26};
+ const max=Math.max(...years.map(y=>getVals(y).reduce((a,b)=>a+b,0)))*1.1;
+ const x=i=>P.l+i*(W-P.l-P.r)/years.length;const bw=(W-P.l-P.r)/years.length-8;
+ const sy=v=>H-P.b-v*(H-P.b-P.t)/max;let s='';
+ for(let g=0;g<=4;g++){const v=max*g/4;s+=`<line x1="${P.l}" y1="${sy(v)}" x2="${W-P.r}" y2="${sy(v)}" stroke="var(--grid)"/><text class="axislab" x="${P.l-6}" y="${sy(v)+4}" text-anchor="end">${fmt(v)}</text>`;}
+ years.forEach((y,i)=>{let acc=0;const vals=getVals(y);const tot=vals.reduce((a,b)=>a+b,0);
+  vals.forEach((v,k)=>{if(v<=0)return;const y1=sy(acc+v),h=sy(acc)-sy(acc+v);
+   s+=`<rect class="bar" data-y="${y}" x="${x(i)+4}" y="${y1}" width="${bw}" height="${Math.max(h-2,.5)}" rx="3" fill="${colors[k%colors.length]}" data-k="${keys[k]}" data-v="${v}"/>`;acc+=v;});
+  s+=`<text class="axislab" x="${x(i)+4+bw/2}" y="${H-P.b+16}" text-anchor="middle">${y}</text>`;
+  if(tot>max*0.05)s+=`<text class="dlabel" x="${x(i)+4+bw/2}" y="${sy(tot)-5}" text-anchor="middle">${fmt(tot)}</text>`;});
+ s+=`<line x1="${P.l}" y1="${H-P.b}" x2="${W-P.r}" y2="${H-P.b}" stroke="var(--axis)"/>`;
+ svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.innerHTML=s;
+ svg.querySelectorAll('.bar').forEach(b=>{b.addEventListener('mousemove',e=>showTip(e,`<b>${b.dataset.y}</b> · ${b.dataset.k}: ${fmt(+b.dataset.v)}`));
+  b.addEventListener('mouseleave',hideTip);
+  if(onClick)b.addEventListener('click',()=>{svg.querySelectorAll('.bar').forEach(z=>z.classList.remove('sel'));
+   svg.querySelectorAll(`[data-y="${b.dataset.y}"]`).forEach(z=>z.classList.add('sel'));onClick(b.dataset.y);});});
+}
+function capDetail(y){const d=D.cap[y],n=D.capN[y];
+ document.getElementById('capdetail').innerHTML=`<div class="detail"><b>${y} — ${fm(d.venture+d.public+d.grant)} across ${d.rounds} events (${d.vrounds} venture)</b><br>Venture ${fm(d.venture)} · Public-market ${fm(d.public)} · Government grants ${fm(d.grant)}<br>${n[lang()]}</div>`;}
+let govMode='spread',govHoriz='all',lastGov='2026',lastCap='2025';
+function govDetail(y){
+ if(govMode==='ann'){const g=D.ann[y],n=D.annN[y];if(!g)return;
+  const rows=g.top.map(p=>`<li><b>${p.c}</b> — ${p.name} — ${fm(p.usd)}</li>`).join('');
+  document.getElementById('govdetail').innerHTML=`<div class="detail"><b>${y} — ${fm(g.total)} announced across ${g.n} commitments</b><br>${n[lang()]}<ul>${rows}</ul></div>`;}
+ else{const t=D.spreadTop[y]||[];const tot=D.spread[y]||0;
+  const rows=t.map(p=>`<li><b>${p.c}</b> — ${p.name} — ${fm(p.per)}/yr (envelope ${p.span})</li>`).join('');
+  const g=D.govcomb[y]||{nat:0,direct:0};
+  const intro=lang()?`Estimated spending in ${y} from ${D.spreadN[y]} active envelopes. Largest parts:`:`Estimated deployment in ${y} from ${D.spreadN[y]} active envelopes. Top contributors:`;
+  const dl=g.direct>0?`<br><b>Plus ${fm(g.direct)} paid direct to companies</b> (also counted in figure 1).`:'';
+  document.getElementById('govdetail').innerHTML=`<div class="detail"><b>${y} — ~${fm(g.nat+g.direct)} government money in total</b><br>National programmes ${fm(g.nat)} · Direct to companies ${fm(g.direct)}${dl}<br>${intro}<ul>${rows}</ul></div>`;}}
+function drawGov(){const C3=css('--s3');
+ if(govMode==='ann'){stacked('govchart',YRS,['Announced'],[C3],y=>[D.ann[y]?D.ann[y].total:0],y=>{lastGov=y;govDetail(y)},290);
+  document.getElementById('govcap').textContent='Announced envelopes, booked whole in the announcement year. Lumpy by construction — click a year.';}
+ else{let yrs=Object.keys(D.govcomb); if(govHoriz==='now')yrs=yrs.filter(y=>+y<=2026);
+  stacked('govchart',yrs,['National programmes','Paid direct to companies'],[C3,css('--s4')],
+    y=>[D.govcomb[y].nat,D.govcomb[y].direct],y=>{lastGov=y;govDetail(y)},290);
+  document.getElementById('govcap').innerHTML='<b>Green</b> = national programmes, each spread across its OFFICIAL period (verified from primary sources for 77 of 90; 13 unverifiable keep a 5-year assumption). <b>Yellow</b> = government money paid straight to named companies (CHIPS awards, DARPA, EIC grants) — booked when received. The yellow band ALSO appears inside figure 1, because it lands on company balance sheets; it is shown here so this chart is not understating the state. 2027+ = already-committed money only. COVERAGE CAVEAT: company-level grant events grow from 1 (2018) to 21 (2026) — partly real growth, but our sweep also found recent awards more easily than old ones, so the yellow band understates earlier years.';}
+ govDetail(lastGov);}
+let rMode='tot';
+const STAGES=['Seed','Series A','Series B','Series C','Late-stage','IPO','Other market financing','Government grants'];
+const BANDCOL={'Seed':'--s1','Series A':'--s2','Series B':'--s5','Series C':'--s4','Late-stage':'--s7','IPO':'--s8','Other market financing':'--muted','Government grants':'--s3'};
+let bandOn=Object.fromEntries(STAGES.map(s=>[s,true]));
+function drawChips(){
+ document.getElementById('rchips').innerHTML=STAGES.map(s=>
+  `<button class="chip ${bandOn[s]?'':'off'}" data-b="${s}"><i style="background:${css(BANDCOL[s])}"></i>${s}</button>`).join('');}
+function drawRounds(){
+ const svg='rchart';const yrs=Object.keys(D.bands);
+ const act=STAGES.filter(s=>bandOn[s]);
+ if(!act.length){document.getElementById(svg).innerHTML='';return;}
+ if(rMode==='tot'){
+  stacked(svg,yrs,['Events'],[css('--s1')],y=>[act.reduce((a,k)=>a+(D.bands[y][k]||0),0)],null,280,v=>Math.round(v));}
+ else{const C=act.map(s=>css(BANDCOL[s]));
+  stacked(svg,yrs,act,C,y=>act.map(k=>D.bands[y][k]||0),null,300,v=>Math.round(v));}
+ drawChips();}
+function draw(){
+ const C=[css('--s1'),css('--s2'),css('--s3'),css('--s4')];
+ stacked('capchart',YRS,['Venture','Public-market','Gov grants'],C,
+   y=>[D.cap[y].venture,D.cap[y].public,D.cap[y].grant],y=>{lastCap=y;capDetail(y)},300);
+ document.getElementById('capcap').innerHTML='Money reaching company bank accounts, by instrument. <b>Venture</b> = diligenced private rounds. <b>Public-market</b> = IPO, SPAC, follow-on and at-the-market share sales by already-listed companies. <b>Government grants</b> = state money paid to a named company (this band also appears in figure 2). Excludes '+D.totals.dropN+' venture-debt and strategic events ($'+D.totals.dropUsd+'M) that are neither equity nor grant. Click a year for its story.';
+ drawGov();
+ stacked('vpchart',YRS,['Venture','Public-market'],[css('--s1'),css('--s2')],y=>[D.cap[y].venture,D.cap[y].public],null,270);
+ drawRounds();
+ (function(){const mods=D.modorder.map(x=>x[0]);const MO=Object.fromEntries(D.modorder.map(x=>[x[0],{venture:x[1],public:x[2],grant:x[3]}]));const svg=document.getElementById('modchart');const W=840,H=300,P={l:52,r:10,t:16,b:44};
+  const C2=[css('--s1'),css('--s2'),css('--s3')];
+  const tot=m=>['venture','public','grant'].reduce((a,k)=>a+(MO[m][k]||0),0);
+  const max=Math.max(...mods.map(tot))*1.1;const x=i=>P.l+i*(W-P.l-P.r)/mods.length;const bw=(W-P.l-P.r)/mods.length-14;
+  const sy=v=>H-P.b-v*(H-P.b-P.t)/max;let s='';
+  for(let g=0;g<=4;g++){const v=max*g/4;s+=`<line x1="${P.l}" y1="${sy(v)}" x2="${W-P.r}" y2="${sy(v)}" stroke="var(--grid)"/><text class="axislab" x="${P.l-6}" y="${sy(v)+4}" text-anchor="end">${fm(v)}</text>`;}
+  mods.forEach((m,i)=>{let acc=0;['venture','public','grant'].forEach((k,ki)=>{const v=MO[m][k]||0;if(v<=0)return;
+    s+=`<rect class="bar" x="${x(i)+7}" y="${sy(acc+v)}" width="${bw}" height="${Math.max(sy(acc)-sy(acc+v)-2,0)}" rx="3" fill="${C2[ki]}" data-t="${m} · ${k}: ${fm(v)}"/>`;acc+=v;});
+   s+=`<text class="dlabel" x="${x(i)+7+bw/2}" y="${sy(tot(m))-5}" text-anchor="middle">${fm(tot(m))}</text>
+   <text class="axislab" x="${x(i)+7+bw/2}" y="${H-P.b+16}" text-anchor="middle">${m.split(' ')[0]}</text>`;
+   if(m.split(' ')[1])s+=`<text class="axislab" x="${x(i)+7+bw/2}" y="${H-P.b+28}" text-anchor="middle">${m.split(' ')[1]}</text>`;});
+  s+=`<line x1="${P.l}" y1="${H-P.b}" x2="${W-P.r}" y2="${H-P.b}" stroke="var(--axis)"/>`;
+  const el=document.getElementById('modchart');el.setAttribute('viewBox','0 0 840 300');el.innerHTML=s;
+  el.querySelectorAll('.bar').forEach(b=>{b.addEventListener('mousemove',e=>showTip(e,b.dataset.t));b.addEventListener('mouseleave',hideTip);});})();
+ (function(){const svg=document.getElementById('modvchart');const W=840,H=300,P={l:52,r:130,t:16,b:26};
+  const mods=['Silicon Spin','Superconducting','Neutral Atom'];const C3=[css('--s1'),css('--s2'),css('--s3')];
+  const yrs=['2021','2022','2023','2024','2025','2026'];
+  const max=Math.max(...mods.map(m=>Math.max(...yrs.map(y=>D.modv[m][y]||0))))*1.12;
+  const x=i=>P.l+i*(W-P.l-P.r)/(yrs.length-1);const sy=v=>H-P.b-v*(H-P.b-P.t)/max;let s='';
+  for(let g=0;g<=4;g++){const v=max*g/4;s+=`<line x1="${P.l}" y1="${sy(v)}" x2="${W-P.r}" y2="${sy(v)}" stroke="var(--grid)"/><text class="axislab" x="${P.l-6}" y="${sy(v)+4}" text-anchor="end">${fm(v)}</text>`;}
+  yrs.forEach((y,i)=>s+=`<text class="axislab" x="${x(i)}" y="${H-P.b+16}" text-anchor="middle">${y}</text>`);
+  mods.forEach((m,mi)=>{let p='';yrs.forEach((y,i)=>{p+=(i?'L':'M')+x(i)+' '+sy(D.modv[m][y]||0)+' ';});
+   s+=`<path d="${p}" fill="none" stroke="${C3[mi]}" stroke-width="2"/>`;
+   yrs.forEach((y,i)=>{s+=`<circle class="bar" cx="${x(i)}" cy="${sy(D.modv[m][y]||0)}" r="4.5" fill="${C3[mi]}" data-t="${m} venture ${y}: ${fm(D.modv[m][y]||0)}"/>`;});
+   s+=`<text class="dlabel" x="${x(yrs.length-1)+8}" y="${sy(D.modv[m]['2026']||0)+4}" fill="${C3[mi]}">${m}</text>`;});
+  s+=`<line x1="${P.l}" y1="${H-P.b}" x2="${W-P.r}" y2="${H-P.b}" stroke="var(--axis)"/>`;
+  svg.setAttribute('viewBox','0 0 840 300');svg.innerHTML=s;
+  svg.querySelectorAll('.bar').forEach(b=>{b.addEventListener('mousemove',e=>showTip(e,b.dataset.t));b.addEventListener('mouseleave',hideTip);});
+  document.getElementById('modvlegend').innerHTML=mods.map((m,i)=>`<span><i class="sw" style="background:${C3[i]}"></i>${m} (venture $/yr)</span>`).join('');})();
+ (function(){const svg=document.getElementById('ctrychart');const W=840,H=320,P={l:110,r:70,t:8,b:8};
+  const C2=[css('--s1'),css('--s2'),css('--s3')];
+  const max=Math.max(...D.country.map(c=>c[1]+c[2]+c[3]));let s='';
+  D.country.forEach((c,i)=>{const y=P.t+i*(H-P.t-P.b)/D.country.length,h=(H-P.t-P.b)/D.country.length-8;
+   let acc=0;[1,2,3].forEach((k,ki)=>{const v=c[k];if(v<=0)return;const w=v/max*(W-P.l-P.r);
+    s+=`<rect class="bar" x="${P.l+acc}" y="${y}" width="${Math.max(w-2,0)}" height="${h}" rx="3" fill="${C2[ki]}" data-t="${c[0]} · ${['venture','public-market','gov grants'][ki]}: ${fm(v)}"/>`;acc+=w;});
+   s+=`<text class="dlabel" x="${P.l-8}" y="${y+h/2+4}" text-anchor="end">${c[0]}</text><text class="dlabel" x="${P.l+acc+6}" y="${y+h/2+4}">${fm(c[1]+c[2]+c[3])}</text>`;});
+  svg.setAttribute('viewBox','0 0 840 320');svg.innerHTML=s;
+  svg.querySelectorAll('.bar').forEach(b=>{b.addEventListener('mousemove',e=>showTip(e,b.dataset.t));b.addEventListener('mouseleave',hideTip);});})();
+ capDetail(lastCap);
+}
+document.getElementById('langseg').addEventListener('click',e=>{
+ if(e.target.tagName!=='BUTTON')return;
+ document.querySelectorAll('#langseg button').forEach(b=>b.classList.toggle('on',b===e.target));
+ document.body.className=e.target.dataset.set;capDetail(lastCap);govDetail(lastGov);});
+document.getElementById('govhoriz').addEventListener('click',e=>{
+ if(e.target.tagName!=='BUTTON')return;govHoriz=e.target.dataset.h;
+ document.querySelectorAll('#govhoriz button').forEach(b=>b.classList.toggle('on',b===e.target));drawGov();});
+document.getElementById('govmode').addEventListener('click',e=>{
+ if(e.target.tagName!=='BUTTON')return;govMode=e.target.dataset.m;
+ document.querySelectorAll('#govmode button').forEach(b=>b.classList.toggle('on',b===e.target));
+ lastGov=govMode==='ann'?'2023':'2026';drawGov();});
+document.getElementById('rchips').addEventListener('click',e=>{
+ const b=e.target.closest('.chip'); if(!b)return; bandOn[b.dataset.b]=!bandOn[b.dataset.b]; drawRounds();});
+document.getElementById('rmode').addEventListener('click',e=>{
+ if(e.target.tagName!=='BUTTON')return;rMode=e.target.dataset.m;
+ document.querySelectorAll('#rmode button').forEach(b=>b.classList.toggle('on',b===e.target));drawRounds();});
+document.addEventListener('click',e=>{
+ const b=e.target.closest('.dl'); if(!b)return;
+ const svg=document.getElementById(b.dataset.fig); if(!svg)return;
+ const cs=getComputedStyle(document.body);
+ const clone=svg.cloneNode(true);
+ const vb=(svg.getAttribute('viewBox')||'0 0 840 300').split(' ').map(Number);
+ clone.setAttribute('width',vb[2]);clone.setAttribute('height',vb[3]);
+ let html=new XMLSerializer().serializeToString(clone);
+ ['--grid','--axis','--muted','--ink2','--ink','--s1','--s2','--s3','--s4','--s5','--s6','--s7','--s8'].forEach(v=>{
+  html=html.split('var('+v+')').join(cs.getPropertyValue(v).trim());});
+ html=html.replace('<svg','<svg xmlns="http://www.w3.org/2000/svg"');
+ const style='<style>.axislab{fill:'+cs.getPropertyValue('--muted').trim()+';font:11px system-ui}.dlabel{fill:'+cs.getPropertyValue('--ink2').trim()+';font:11px system-ui}</style>';
+ html=html.replace(/(<svg[^>]*>)/,'$1'+style);
+ const img=new Image();
+ img.onload=()=>{const c=document.createElement('canvas');c.width=vb[2]*2;c.height=vb[3]*2;
+  const x=c.getContext('2d');x.fillStyle=cs.getPropertyValue('--surface').trim();x.fillRect(0,0,c.width,c.height);
+  x.scale(2,2);x.drawImage(img,0,0);
+  c.toBlob(bl=>{const a=document.createElement('a');a.href=URL.createObjectURL(bl);
+   a.download=b.dataset.name+'.png';a.click();URL.revokeObjectURL(a.href);});};
+ img.src='data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(html)));});
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
+draw();
+</script></body></html>
